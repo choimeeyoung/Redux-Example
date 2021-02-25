@@ -1,0 +1,113 @@
+Redux 정의 : 방의 배치를 바꾸려할때 기존의 방의 배치를 변경하는것이 아닌 원하는 배치를 가진 새로운 방을 생성
+            컴포넌트 들끼리 데이터 교류 및 State 관리를 쉽고 효율적으로 할수있게 해주는 라이브러리
+
+Flux      : 추상적인 개념 / 추상적 개념을 구현 한것 => Redux
+
+1. Action Creator : 앱에서 어떤 부분이 업데이트 되어야 하는지 정의
+                    업데이트의 정보를 주면 Dispatcher 가 이해 할 수 있는 Action 의 형태로 변환
+
+2. Dispatcher     : 전달 받은 Action 을 읽고 업데이트 시켜줄 부분을 지정  / 교환원의 역할
+                    동기적으로 실행 => 여러 Action 이 들어온 경우 우선권이 있는 액션을 먼저 처리 => 작업이 꼬이지 않음
+
+3. Store          : 모든 상태 와 관련 로직을 지니고 있음 / 정보관료의 역할
+
+4. View           : 어플리케이션의 내부에 대해서는 모르나 사람이 이해 할 수 있은 HTML로 변환 / 발표자의 역할
+
+Flux 의 준비과정
+    1. Store 는 Dispatcher 에게 Action 이 들어오면 알려 달라고 함
+    2. View 는 Store 에게 최신의 상태를 물음
+    3. Store 는 View 에게 상태를 전달
+    4. View 는 자식 View 에게 전달
+    5. View 는 Store 에게 상태가 변경시 알려달라고 부탁을 함
+
+Flux 의 데이터의 흐름
+    1. View 는 Action 생성자에게 Action 을 준비하라고 함
+    2. Action 생성자는 Action 을 포맷에 맞게 만들어서 Dispatcher 에게 전달
+    3. Dispatcher 는 Action 의 순서에 따라 받은 Action 을 Store 에 보내줌
+    4. Store 는 받은 Action 을 상태에 맞게 변경 [Update]
+    5. Store 는 변경 사항을 View 에게 전달
+    6. View 는 전달 받은 변경 사항을 자식  View 에게 전달후 적용
+
+참조링크 : http://bestalign.github.io/2015/10/06/cartoon-guide-to-flux/
+
+Redux : Flux 의 구현체 / Flux 를 사용하기 편하도록 해주는 라이브러리
+
+Redux 3가지원칙
+    1. Single Source of Truth
+          어플리케이션의 state 를 위해 단 한개의 store 를 사용
+          Flux 와의 주요 차이 / Flux 에서는 여러개의 store 를 사용
+
+    2. State is Read-Only
+          어플리케이션에서 store 의 state 를 직접 변경 할 수 없음
+          state 를 변경하기 위해서는 무조건 action 이 dispatch 되어야 함
+
+    3. Change are made with pure Functions
+            action 객체를 처리하는 함수를 reducer 라고 함
+            reducer 는 정보를 받아서 상태를 어떻게 업데이트 할지를 정의
+            reducer 는 '순수함수' 로 작성 되어야 함
+             - 네트워크 및 데이터 베이스의 접근 불가
+             - 같은 인수로 실행된 함수는 언제나 같은 결과를 반환
+             - 순수 하지 않은 API 사용 불가 (ex: Date.now() , Math.random() 등등)
+
+1. Action Creator : Flux 의 action creator 와 동일 / Flux 와 다르게 Dispatcher 에 Action 을 보내지 않음
+
+2. Store : Flux[여러개의 store] 와 달리 단 한 개의 Store 를 가짐
+           상태 트리 전체를 유지하는 책임을 가지고 있음
+           Dispatcher 의 역할을 수행 / 해당 Action 에 대해서 어떤 작업을 해야 하는지 에 대한 판단함
+           Store 는 어떤 상태의 변화가 있어야 하는지 Reducer 에게 묻는다 .
+
+3. Dispatcher :  Redux 에서는 Dispatcher 가 없음
+4. Reducer : Store 에서 판단한 작업을 실질적으 수행하는 함수
+             변화를 일으켜 주는 함수
+             Reducer 1개 일 때    => Root Reducer / RootReducer 에서 Action 을 처리
+             Reducer 여러개 일 때  => 전체를 Reducer 관리하는 Root Reducer
+             Reducer 중에서 전달받 Action 을 처리하는 Reducer 를 찾아서 해당 액션을 전달
+             기존의 상태는 변경 하지 않음 / 새로운 복사복은 만든후 모든 변경 사항을 적용 [ 새로운 방을 만든다. ]
+5. View : 똑똑한 컴포넌트 / 멍청한 컴포넌트
+          똑똑한 컴포넌트 : [ex : ContactComponent]
+                        Action 처리를 책임 짐
+                        자신의 CSS 를 가지고 있지 않음
+                        자기자신의 DOM 을 거의 가지고 있지 않음
+
+          멍청한 컴포넌트 : [ex : ContactCreateComponent, ContactDetailComponent]
+                        Action 에 직접 의존성을 가지기 않고 Action 을 Props 통해서 전달 받아서 사용
+                        자신의 CSS 를 가지고 있
+                        자기자신의 DOM 을 거의 가지고 있음
+
+6. View Layer Binding : Store 를 View 에 연결하기 위해서 필요
+7. Root Component :   Redux 의 기본적인 설정을 만듬 / 설정후에는 특별히 하는 일이 없음
+
+Redux 의 데이터의 흐름
+    1. View 가 Action 을 요청하면 Action Creator 가 Action 생성 후 View 에게 반환
+    2. View 가 Store 에게 Action 을 전달
+    3. Store 가 현재 상태 트리와 액션을 Root Reducer 에게 전달
+    4. Root Reducer 는 상태 트리를 조각으로 나눈뒤 알맞을 서브 리듀서로 상태 조각을 전달
+    5. Sub Reducer 는 상태의 사본을 만든후 복사본에 변경사항을 적용 시킨후 Root Reducer 에게 변경된 사본을 돌려줌
+    6. 모든 Sub Reducer 가 변경된 사본을 돌려주면 Root Reducer 는 조각들을 하나로 모아서 상태 트리를 만든뒤 Store 에게 전달
+    7. Store 는 옛날 상태 트리는 새로운 상태 트리로 변경
+    8. Store 는 ViewLayerBinding 에게 어플리케이션 상태 변경 사실을 알림
+    9. ViewLayerBinding 은 Store 에게 새로운 상태를 요청
+    10.  ViewLayerBinding 은 View 에게 화면을 업데이트 하도록 요청
+
+참조링크 : http://bestalign.github.io/2015/10/26/cartoon-intro-to-redux/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
