@@ -1,10 +1,10 @@
-import React, {Component,PropsTypes} from 'react';
-
+import React, {Component} from 'react';
+import PropTypes from "prop-types";
 
 const propTypes = {
-     onPlus : PropsTypes.func,
-     onSubtract: PropsTypes.func,
-     onRandomizeColor: PropsTypes.func
+     onPlus : PropTypes.func,
+     onSubtract: PropTypes.func,
+     onRandomizeColor: PropTypes.func
 };
 
 function createWarning(funcName){

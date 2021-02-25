@@ -57,12 +57,14 @@ Redux 3가지원칙
            Store 는 어떤 상태의 변화가 있어야 하는지 Reducer 에게 묻는다 .
 
 3. Dispatcher :  Redux 에서는 Dispatcher 가 없음
-4. Reducer : Store 에서 판단한 작업을 실질적으 수행하는 함수
+4. Reducer : Store 에서 판단한 작업을 실질적으로 수행하는 함수
              변화를 일으켜 주는 함수
              Reducer 1개 일 때    => Root Reducer / RootReducer 에서 Action 을 처리
              Reducer 여러개 일 때  => 전체를 Reducer 관리하는 Root Reducer
              Reducer 중에서 전달받 Action 을 처리하는 Reducer 를 찾아서 해당 액션을 전달
              기존의 상태는 변경 하지 않음 / 새로운 복사복은 만든후 모든 변경 사항을 적용 [ 새로운 방을 만든다. ]
+             이전 상태와 Action 을 받아서 다음 상태를 반환
+
 5. View : 똑똑한 컴포넌트 / 멍청한 컴포넌트
           똑똑한 컴포넌트 : [ex : ContactComponent]
                         Action 처리를 책임 짐
